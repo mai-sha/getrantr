@@ -18,13 +18,19 @@ var RantView = Backbone.View.extend({
     this.model.on('change', this.render, this);
     this.$el.on('click', function(evt) {
       if (evt.target.matches('.js-delete')) {
+        evt.preventDefault();
         this.onDelete(evt);
       }
     }.bind(this));
   },
 
   render: function() {
-    this.$el.html(this.template(this.model.toJSON()));
+    var rant = this.model.toJSON();
+    if (typeof rant.text !== 'string') {
+      console.error('Received invalid rant data', rant);
+      rant.text = "Sorry! an error occured. We're on it!";
+    }
+    this.$el.html(this.template(rant));
     return this;
   },
 
@@ -32,7 +38,7 @@ var RantView = Backbone.View.extend({
     setTimeout(function() {
       this.model.destroy();
       this.remove();
-    });
+    }.bind(this));
   }
 
 });

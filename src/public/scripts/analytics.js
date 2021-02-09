@@ -22,7 +22,8 @@
     evt.preventDefault();
 
     trackConversion(function() {
-      form.submit();
+      HTMLFormElement.prototype.submit.call(form);
+//       form.submit();
     });
 
   }, true);
